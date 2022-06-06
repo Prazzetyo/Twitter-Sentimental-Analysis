@@ -6,6 +6,7 @@ from textblob import TextBlob
 from wordcloud import WordCloud
 import streamlit as st
 import datetime, pytz
+from googletrans import Translator
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -67,12 +68,16 @@ def extract_hastag(text):
     text = re.findall("(#[A-Za-z0–9\d\w]+)", text)
     return text
 
+translator = Translator()
+
 def getSubjectivity(text):
-   return TextBlob(text).sentiment.subjectivity
+   translated_text = translator.translate(text)
+   return TextBlob(str(translated_text)).sentiment.subjectivity
 
 # Create a function to get the polarity
 def getPolarity(text):
-   return TextBlob(text).sentiment.polarity
+   translated_text = translator.translate(text)
+   return TextBlob(str(translated_text)).sentiment.polarity
 
 def getAnalysis(score):
   if score < 0:
