@@ -72,7 +72,7 @@ def getSubjectivity(text):
 
 # Create a function to get the polarity
 def getPolarity(text):
-   return  TextBlob(text).sentiment.polarity
+   return TextBlob(text).sentiment.polarity
 
 def getAnalysis(score):
   if score < 0:
@@ -86,7 +86,7 @@ def getAnalysis(score):
 def preprocessing_data(word_query, number_of_tweets, function_option):
 
   if function_option == "Search By #Tag and Words":
-    posts = tweepy.Cursor(api.search_tweets, q=word_query, count = 200, lang ="en", tweet_mode="extended").items((number_of_tweets))
+    posts = tweepy.Cursor(api.search_tweets, q=word_query, count = 200, lang ="id", tweet_mode="extended").items((number_of_tweets))
   
   if function_option == "Search By Username":
     posts = tweepy.Cursor(api.user_timeline, screen_name=word_query, count = 200, tweet_mode="extended").items((number_of_tweets))
