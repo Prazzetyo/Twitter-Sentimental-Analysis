@@ -58,6 +58,8 @@ def cleanTxt(text):
     text = re.sub(":","",text) # Removing hyperlink
     text = re.sub("_","",text) # Removing hyperlink
     text = emoji_pattern.sub(r'', text)
+    # text = text.lower()
+    # text = re.sub("^\d+\s|\s\d+\s|\s\d+$", " ", text)
     return text
 
 def extract_mentions(text):
@@ -71,13 +73,13 @@ def extract_hastag(text):
 translator = Translator()
 
 def getSubjectivity(text):
-   translated_text = translator.translate(text)
-   return TextBlob(str(translated_text)).sentiment.subjectivity
+  #  translated_text = translator.translate(text)
+   return TextBlob(text).sentiment.subjectivity
 
 # Create a function to get the polarity
 def getPolarity(text):
-   translated_text = translator.translate(text)
-   return TextBlob(str(translated_text)).sentiment.polarity
+  #  translated_text = translator.translate(text)
+   return TextBlob(text).sentiment.polarity
 
 def getAnalysis(score):
   if score < 0:
@@ -91,12 +93,13 @@ def getAnalysis(score):
 def preprocessing_data(word_query, number_of_tweets, function_option):
 
   if function_option == "Search By #Tag and Words":
-    posts = tweepy.Cursor(api.search_tweets, q=word_query, count = 200, lang ="id", tweet_mode="extended").items((number_of_tweets))
+    posts = tweepy.Cursor(api.search_tweets, q=word_query, count = 200, lang ="en", tweet_mode="extended").items((number_of_tweets))
   
   if function_option == "Search By Username":
     posts = tweepy.Cursor(api.user_timeline, screen_name=word_query, count = 200, tweet_mode="extended").items((number_of_tweets))
   
   data  = pd.DataFrame([tweet.full_text for tweet in posts], columns=['Tweets'])
+  # data.drop_duplicates(inplace = True)
 
   data["mentions"] = data["Tweets"].apply(extract_mentions)
   data["hastags"] = data["Tweets"].apply(extract_hastag)
