@@ -57,9 +57,11 @@ def cleanTxt(text):
     text = re.sub("\n","",text) # Removing hyperlink
     text = re.sub(":","",text) # Removing hyperlink
     text = re.sub("_","",text) # Removing hyperlink
+    text = re.sub(r"[^\w\s]", "", text)  # Removing Puncuation
     text = emoji_pattern.sub(r'', text)
-    # text = text.lower()
-    # text = re.sub("^\d+\s|\s\d+\s|\s\d+$", " ", text)
+    text = ''.join([i for i in text if not i.isdigit()])
+    text = text.lower()
+    text = re.sub("^\d+\s|\s\d+\s|\s\d+$", " ", text)
     return text
 
 def extract_mentions(text):
@@ -98,7 +100,9 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
   if function_option == "Search By Username":
     posts = tweepy.Cursor(api.user_timeline, screen_name=word_query, count = 200, tweet_mode="extended").items((number_of_tweets))
   
+  
   data  = pd.DataFrame([tweet.full_text for tweet in posts], columns=['Tweets'])
+  data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
   # data.drop_duplicates(inplace = True)
 
   data["mentions"] = data["Tweets"].apply(extract_mentions)
