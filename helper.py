@@ -7,6 +7,10 @@ from wordcloud import WordCloud
 import streamlit as st
 import datetime, pytz
 from googletrans import Translator
+import nltk
+nltk.download()
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -48,6 +52,13 @@ def twitter_connection():
 
 api = twitter_connection()
 
+def word_tokenize_wrapper(text):
+  return word_tokenize(text)
+
+# def stopwords_removal(words):
+#   stop_words = stopwords.words('english')
+#   stop_words = set(stop_words)
+#   return [word for word in words if word not in stop_words]
 
 def cleanTxt(text):
     text = re.sub('@[A-Za-z0–9]+', '', text) #Removing @mentions
@@ -62,6 +73,11 @@ def cleanTxt(text):
     text = ''.join([i for i in text if not i.isdigit()])
     text = text.lower()
     text = re.sub("^\d+\s|\s\d+\s|\s\d+$", " ", text)
+
+    txt_word = word_tokenize_wrapper(text)
+    # txt_word_remove = stopwords_removal(txt_word)
+    # print(txt_word_remove)
+
     return text
 
 def extract_mentions(text):
