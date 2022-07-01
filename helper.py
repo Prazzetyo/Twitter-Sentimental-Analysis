@@ -119,6 +119,7 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
   
   data  = pd.DataFrame([tweet.full_text for tweet in posts], columns=['Tweets'])
   data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
+  # data['translated_value'] = data['Tweets'].apply(lambda x: translator.translate(x, dest='en').text)
   # data.drop_duplicates(inplace = True)
 
   data["mentions"] = data["Tweets"].apply(extract_mentions)
