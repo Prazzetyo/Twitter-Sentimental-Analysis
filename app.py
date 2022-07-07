@@ -10,8 +10,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'Get Help': 'https://github.com/everydaycodings/Data-Analysis-Web-App',
-        'Report a bug': "https://github.com/everydaycodings/Data-Analysis-Web-App/issues/new",
+        'Get Help': 'https://github.com/Prazzetyo/Twitter-Sentimental-Analysis',
+        'Report a bug': "https://github.com/Prazzetyo/Twitter-Sentimental-Analysis/issues/new",
         'About': "# This is a header. This is an *extremely* cool app!"
     }
 )
