@@ -4,17 +4,16 @@ from helper import preprocessing_data, graph_sentiment, analyse_mention, analyse
 from PIL import Image
 
 
-
 st.set_page_config(
-     page_title="Data Analysis Web App",
-     page_icon="🧊",
-     layout="wide",
-     initial_sidebar_state="expanded",
-     menu_items={
-         'Get Help': 'https://github.com/everydaycodings/Data-Analysis-Web-App',
-         'Report a bug': "https://github.com/everydaycodings/Data-Analysis-Web-App/issues/new",
-         'About': "# This is a header. This is an *extremely* cool app!"
-     }
+    page_title="Data Analysis Web App",
+    page_icon="🧊",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://github.com/everydaycodings/Data-Analysis-Web-App',
+        'Report a bug': "https://github.com/everydaycodings/Data-Analysis-Web-App/issues/new",
+        'About': "# This is a header. This is an *extremely* cool app!"
+    }
 )
 image = Image.open('twitter.png')
 st.image(image, width=250)
@@ -22,16 +21,19 @@ st.image(image, width=250)
 
 st.title("Twitter Sentimental Analysis")
 
-function_option = st.sidebar.selectbox("Select The Funtionality: ", ["Search By #Tag and Words", "Search By Username"])
+function_option = st.sidebar.selectbox("Select The Funtionality: ", [
+                                       "Search By Indonesian #Tag and Words", "Search By English #Tag and Words"])
 
-if function_option == "Search By #Tag and Words":
-    word_query = st.text_input("Enter the Hastag or any word")
+if function_option == "Search By Indonesian #Tag and Words":
+    word_query = st.text_input("Enter the Hastag or any word in Indonesia")
 
-if function_option == "Search By Username":
-    word_query = st.text_input("Enter the Username ( Don't include @ )")
+if function_option == "Search By English #Tag and Words":
+    word_query = st.text_input("Enter the Hastag or any word in English")
 
-number_of_tweets = st.slider("How many tweets You want to collect from {}".format(word_query), min_value=100, max_value=10000)
-st.info("1 Tweets takes approx 0.05 sec so you may have to wait {} minute for {} Tweets, So Please Have Patient.".format(round((number_of_tweets*0.05/60),2), number_of_tweets))
+number_of_tweets = st.slider("How many tweets You want to collect from {}".format(
+    word_query), min_value=100, max_value=10000)
+st.info("1 Tweets takes approx 0.05 sec so you may have to wait {} minute for {} Tweets, So Please Have Patient.".format(
+    round((number_of_tweets*0.05/60), 2), number_of_tweets))
 
 if st.button("Analysis Sentiment"):
 
@@ -46,11 +48,10 @@ if st.button("Analysis Sentiment"):
     st.write(data)
     download_data(data, label="twitter_sentiment_filtered")
     st.write(" ")
-    
+
     col1, col2, col3 = st.columns(3)
     with col2:
         st.markdown("### EDA On the Data")
-
 
     col1, col2 = st.columns(2)
 
@@ -60,17 +61,17 @@ if st.button("Analysis Sentiment"):
     with col2:
         st.text("Top 10 Hastags used in {} tweets".format(number_of_tweets))
         st.bar_chart(hastag)
-    
+
     col3, col4 = st.columns(2)
     with col3:
         st.text("Top 10 Used Links for {} tweets".format(number_of_tweets))
         st.bar_chart(data["links"].value_counts().head(10).reset_index())
-    
+
     with col4:
         st.text("All the Tweets that containes top 10 links used")
-        filtered_data = data[data["links"].isin(data["links"].value_counts().head(10).reset_index()["index"].values)]
+        filtered_data = data[data["links"].isin(
+            data["links"].value_counts().head(10).reset_index()["index"].values)]
         st.write(filtered_data)
 
     st.subheader("Twitter Sentment Analysis")
     st.bar_chart(analyse)
-    
