@@ -152,7 +152,7 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
                               lang="id", tweet_mode="extended").items((number_of_tweets))
         data = pd.DataFrame(
             [tweet.full_text for tweet in posts], columns=['Tweets'])
-        data.drop_duplicates()
+        # data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
 
         data["mentions"] = data["Tweets"].apply(extract_mentions)
         data["hastags"] = data["Tweets"].apply(extract_hastag)
@@ -161,14 +161,16 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
         data['retweets'] = data['Tweets'].str.extract(
             '(RT[\s@[A-Za-z0–9\d\w]+)', expand=False).str.strip()
 
+        data['Tweets'] = data['Tweets'].apply(lambda x: translator.translate(x, dest='en').text)
         data['Tweets'] = data['Tweets'].apply(cleanTxt)
         data['Tweets'] = data['Tweets'].apply(tokenizing)
-        data['Tweets'] = data['Tweets'].apply(ind_remove_stopwords)
-        data['Tweets'] = data['Tweets'].apply(indStemming)
+        data['Tweets'] = data['Tweets'].apply(eng_remove_stopwords)
+        data['Tweets'] = data['Tweets'].apply(engStemming)
         data['Tweets'] = data['Tweets'].apply(join_text)
 
-        data['Subjectivity'] = data['Tweets'].apply(getIndSubjectivity)
-        data['Polarity'] = data['Tweets'].apply(getIndPolarity)
+        data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
+        data['Subjectivity'] = data['Tweets'].apply(getEngSubjectivity)
+        data['Polarity'] = data['Tweets'].apply(getEngPolarity)
         data['Analysis'] = data['Polarity'].apply(getAnalysis)
 
         return data
@@ -203,12 +205,12 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
         return data
 
 
-def predict(data):
-    dataset = data[['Tweets', 'Analysis']]
-    y = data['Polarity']
+# def predict(data):
+#     dataset = data[['Tweets', 'Analysis']]
+#     y = data['Polarity']
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        data['Tweets'], data['Analysis'], test_size=0.1, random_state=42)
+#     X_train, X_test, y_train, y_test = train_test_split(
+#         data['Tweets'], data['Analysis'], test_size=0.1, random_state=42)
 
 
 def download_data(data, label):
