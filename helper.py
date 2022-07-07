@@ -8,6 +8,9 @@ from wordcloud import WordCloud
 import streamlit as st
 import datetime
 import pytz
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
 from googletrans import Translator
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
