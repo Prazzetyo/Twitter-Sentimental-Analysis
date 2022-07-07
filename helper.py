@@ -16,6 +16,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 # from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.stem.porter import PorterStemmer
+translator = Translator()
 
 emoji_pattern = re.compile("["
                            u"\U0001F600-\U0001F64F"  # emoticons
@@ -114,10 +115,6 @@ def extract_mentions(text):
 def extract_hastag(text):
     text = re.findall("(#[A-Za-z0–9\d\w]+)", text)
     return text
-
-
-# translator = Translator()
-
 
 def getEngSubjectivity(text):
     return TextBlob(text).sentiment.subjectivity
