@@ -5,7 +5,7 @@ datetime
 pytz
 textblob
 tweepy==4.4.0
-wordcloud
+# wordcloud
 configparser
 nltk
 sastrawi
