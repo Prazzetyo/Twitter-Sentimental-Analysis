@@ -14,8 +14,9 @@ nltk.download('punkt')
 from googletrans import Translator
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+# from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.stem.porter import PorterStemmer
+translator = Translator()
 
 emoji_pattern = re.compile("["
                            u"\U0001F600-\U0001F64F"  # emoticons
@@ -80,9 +81,9 @@ def tokenizing(text):
     return word_tokenize(text)
 
 
-def ind_remove_stopwords(tokens):
-    ind_stopwords = stopwords.words('indonesian')
-    return [i for i in tokens if i not in ind_stopwords]
+# def ind_remove_stopwords(tokens):
+#     ind_stopwords = stopwords.words('indonesian')
+#     return [i for i in tokens if i not in ind_stopwords]
 
 
 def eng_remove_stopwords(tokens):
@@ -90,10 +91,10 @@ def eng_remove_stopwords(tokens):
     return [i for i in tokens if i not in eng_stopwords]
 
 
-def indStemming(tokens):
-    factory = StemmerFactory()
-    stemmer = factory.create_stemmer()
-    return [stemmer.stem(term) for term in tokens]
+# def indStemming(tokens):
+#     factory = StemmerFactory()
+#     stemmer = factory.create_stemmer()
+#     return [stemmer.stem(term) for term in tokens]
 
 
 def engStemming(tokens):
@@ -115,10 +116,6 @@ def extract_hastag(text):
     text = re.findall("(#[A-Za-z0–9\d\w]+)", text)
     return text
 
-
-translator = Translator()
-
-
 def getEngSubjectivity(text):
     return TextBlob(text).sentiment.subjectivity
 
@@ -127,12 +124,12 @@ def getEngPolarity(text):
     return TextBlob(text).sentiment.polarity
 
 
-def getIndPolarity(text):
-    return TextBlob(text).translate(from_lang='id', to='en').polarity
+# def getIndPolarity(text):
+#     return TextBlob(text).translate(from_lang='id', to='en').polarity
 
 
-def getIndSubjectivity(text):
-    return TextBlob(text).translate(from_lang='id', to='en').subjectivity
+# def getIndSubjectivity(text):
+#     return TextBlob(text).translate(from_lang='id', to='en').subjectivity
 
 
 def getAnalysis(score):
