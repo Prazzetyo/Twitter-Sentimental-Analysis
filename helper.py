@@ -4,7 +4,6 @@ import pandas as pd
 import configparser
 import re
 from textblob import TextBlob
-# from wordcloud import WordCloud
 import streamlit as st
 import datetime
 import pytz
@@ -14,7 +13,6 @@ nltk.download('punkt')
 from googletrans import Translator
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-# from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.stem.porter import PorterStemmer
 translator = Translator()
 
@@ -80,22 +78,9 @@ def cleanTxt(text):
 def tokenizing(text):
     return word_tokenize(text)
 
-
-# def ind_remove_stopwords(tokens):
-#     ind_stopwords = stopwords.words('indonesian')
-#     return [i for i in tokens if i not in ind_stopwords]
-
-
 def eng_remove_stopwords(tokens):
     eng_stopwords = stopwords.words('english')
     return [i for i in tokens if i not in eng_stopwords]
-
-
-# def indStemming(tokens):
-#     factory = StemmerFactory()
-#     stemmer = factory.create_stemmer()
-#     return [stemmer.stem(term) for term in tokens]
-
 
 def engStemming(tokens):
     stemmer = PorterStemmer()
@@ -123,15 +108,6 @@ def getEngSubjectivity(text):
 def getEngPolarity(text):
     return TextBlob(text).sentiment.polarity
 
-
-# def getIndPolarity(text):
-#     return TextBlob(text).translate(from_lang='id', to='en').polarity
-
-
-# def getIndSubjectivity(text):
-#     return TextBlob(text).translate(from_lang='id', to='en').subjectivity
-
-
 def getAnalysis(score):
     if score < 0:
         return 'Negative'
@@ -149,7 +125,6 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
                               lang="id", tweet_mode="extended").items((number_of_tweets))
         data = pd.DataFrame(
             [tweet.full_text for tweet in posts], columns=['Tweets'])
-        # data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
 
         data["mentions"] = data["Tweets"].apply(extract_mentions)
         data["hastags"] = data["Tweets"].apply(extract_hastag)
@@ -175,12 +150,10 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
     if function_option == "Search By English #Tag and Words":
         posts = tweepy.Cursor(api.search_tweets, q=word_query, count=200,
                               lang="en", tweet_mode="extended").items((number_of_tweets))
-        # posts = tweepy.Cursor(api.user_timeline, screen_name=word_query,
-        #                       count=200, tweet_mode="extended").items((number_of_tweets))
-
+   
         data = pd.DataFrame(
             [tweet.full_text for tweet in posts], columns=['Tweets'])
-        data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
+        
 
         data["mentions"] = data["Tweets"].apply(extract_mentions)
         data["hastags"] = data["Tweets"].apply(extract_hastag)
@@ -195,20 +168,12 @@ def preprocessing_data(word_query, number_of_tweets, function_option):
         data['Tweets'] = data['Tweets'].apply(engStemming)
         data['Tweets'] = data['Tweets'].apply(join_text)
 
+        data.drop_duplicates(subset='Tweets', keep="first", inplace=True)
         data['Subjectivity'] = data['Tweets'].apply(getEngSubjectivity)
         data['Polarity'] = data['Tweets'].apply(getEngPolarity)
         data['Analysis'] = data['Polarity'].apply(getAnalysis)
 
         return data
-
-
-# def predict(data):
-#     dataset = data[['Tweets', 'Analysis']]
-#     y = data['Polarity']
-
-#     X_train, X_test, y_train, y_test = train_test_split(
-#         data['Tweets'], data['Analysis'], test_size=0.1, random_state=42)
-
 
 def download_data(data, label):
     current_time = datetime.datetime.now(pytz.timezone('Asia/Kolkata'))
@@ -256,7 +221,6 @@ def analyse_hastag(data):
 
 
 def graph_sentiment(data):
-    analys = data["Analysis"].value_counts().reset_index(
-    ).sort_values(by="index", ascending=False)
+    analys = data["Analysis"].value_counts()
 
     return analys
