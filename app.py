@@ -65,7 +65,7 @@ if st.button("Analysis Sentiment"):
     col3, col4 = st.columns(2)
     with col3:
         st.text("Top 10 Used Links for {} tweets".format(number_of_tweets))
-        st.bar_chart(data["links"].value_counts().head(10).reset_index())
+        st.bar_chart(data["links"].value_counts().head(10).reset_index().set_index('index'))
 
     with col4:
         st.text("All the Tweets that containes top 10 links used")
